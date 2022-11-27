@@ -1,27 +1,20 @@
 'use strict';
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('allcodes', {
+        await queryInterface.createTable('foss', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            keyMap: {
+            name: {
                 type: Sequelize.STRING
             },
-            type: {
-                type: Sequelize.STRING
+            commment: {
+                type: Sequelize.STRING,
+                defaultValue: "pets table stores all pets"
             },
-            value_en: {
-                type: Sequelize.STRING
-            },
-            value_vi: {
-                type: Sequelize.STRING
-            },
-
-
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE
@@ -33,6 +26,6 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('allcodes');
+        await queryInterface.dropTable('foss');
     }
 };

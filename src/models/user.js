@@ -11,6 +11,15 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here (moi lien he)
+            User.belongsTo(models.Allcode, { foreignKey: 'position', targetKey: 'keyMap', as: 'positionData' })
+            User.belongsTo(models.Allcode, { foreignKey: 'gender', targetKey: 'keyMap', as: 'genderData' })
+            User.hasOne(models.Markdown, { foreignKey: 'doctorId' })
+            User.hasOne(models.Doctor_Infor, { foreignKey: 'doctorID' })
+
+
+            User.hasMany(models.Schedule, { foreignKey: 'doctorID', as: 'doctorData' })
+            User.hasMany(models.Booking, { foreignKey: 'patientId', as: 'patientData' })
+
         }
     }
     User.init({
@@ -19,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         firstName: DataTypes.STRING,
         lastName: DataTypes.STRING,
         address: DataTypes.STRING,
-        gender: DataTypes.BOOLEAN,
+        gender: DataTypes.STRING,
         roleId: DataTypes.STRING,
         phoneNumber: DataTypes.STRING,
         position: DataTypes.STRING,

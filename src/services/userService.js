@@ -23,7 +23,7 @@ let handleUserLogin = (email, password) => {
             if (isExist) {
                 //get password
                 let user = await db.User.findOne({
-                    attributes: ['email', 'roleId', 'password', 'firstName', 'lastName'],
+                    attributes: ['id', 'email', 'roleId', 'password', 'firstName', 'lastName'],
                     where: { email: email },
                     raw: true
                 });
@@ -118,15 +118,18 @@ let createNewUser = (data) => {
                 })
             } else {
                 let hashPasswordFromBrcypt = await hashUserPassword(data.password);
+
                 await db.User.create({
                     email: data.email,
                     password: hashPasswordFromBrcypt,
                     firstName: data.firstName,
                     lastName: data.lastName,
                     address: data.address,
-                    gender: data.gender === '1' ? true : false,
-                    roleId: data.STRING,
+                    gender: data.gender,
+                    roleId: data.roleId,
                     phoneNumber: data.phoneNumber,
+                    position: data.position,
+                    image: data.image
                 })
                 resolve({
                     errCode: 0,
@@ -135,10 +138,12 @@ let createNewUser = (data) => {
             }
 
         } catch (e) {
+            console.log(e)
             reject(e)
         }
     })
 }
+
 
 let deleteUser = (userId) => {
     return new Promise(async (resolve, reject) => {
@@ -169,6 +174,7 @@ let deleteUser = (userId) => {
 let updateUserData = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
+            // || !data.roleId || !data.position || !data.gender
             if (!data.id) {
                 resolve({
                     errCode: 2,
@@ -184,6 +190,10 @@ let updateUserData = (data) => {
                 user.firstName = data.firstName;
                 user.lastName = data.lastName;
                 user.address = data.address;
+                user.roleId = data.roleId;
+                user.position = data.position;
+                user.gender = data.gender;
+                user.phoneNumber = data.phoneNumber
 
                 await user.save();
                 resolve({

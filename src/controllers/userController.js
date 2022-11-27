@@ -38,8 +38,15 @@ let handleGetAllUser = async (req, res) => {
 }
 
 let handleCreateNewUser = async (req, res) => {
-    let message = await userService.createNewUser(req.body);
-    return res.status(200).json(message);
+    try {
+        let message = await userService.createNewUser(req.body);
+        return res.status(200).json(message);
+    } catch (e) {
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
 }
 
 
@@ -59,7 +66,6 @@ let getAllCode = async (req, res) => {
         let data = await userService.getAllCodeService(req.query.type);
         return res.status(200).json(data)
     } catch (e) {
-        console.log('Get all code error', e)
         return res.status(200).json({
             errCode: -1,
             errMessage: "Error from server"
